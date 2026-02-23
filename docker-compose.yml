@@ -1,0 +1,12 @@
+services:
+  verdaccio:
+    image: verdaccio/verdaccio
+    container_name: verdaccio
+    ports:
+      - "4873:4873"
+    volumes:
+      - verdaccio-storage:/verdaccio/storage
+      - ./verdaccio-config/config.yaml:/verdaccio/conf/config.yaml
+
+volumes:
+  verdaccio-storage:

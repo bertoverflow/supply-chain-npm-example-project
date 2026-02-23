@@ -1,0 +1,9 @@
+{
+  "name": "example-project",
+  "version": "1.0.0",
+  "description": "Victim project for supply chain demo",
+  "main": "index.js",
+  "dependencies": {
+    "@demo/some-library": "1.1.x"
+  }
+}

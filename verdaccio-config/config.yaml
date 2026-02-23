@@ -1,0 +1,35 @@
+# Based on Verdaccio Docker default config:
+# https://github.com/verdaccio/verdaccio/blob/master/packages/config/src/conf/docker.yaml
+#
+# We use publish: $all (instead of $authenticated) so the demo works without
+# running npm adduser; access: $all matches the official default (anyone can read).
+
+storage: /verdaccio/storage/data
+
+auth:
+  htpasswd:
+    file: /verdaccio/storage/htpasswd
+
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+
+packages:
+  "@demo/*":
+    access: $all
+    publish: $all
+    unpublish: $all
+
+  "**":
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
+    proxy: npmjs
+
+server:
+  keepAliveTimeout: 60
+
+log:
+  type: stdout
+  format: pretty
+  level: http
