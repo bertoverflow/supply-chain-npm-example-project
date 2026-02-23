@@ -1,0 +1,10 @@
+{
+  "name": "@demo/some-other-library",
+  "version": "2.0.1",
+  "description": "Another demo library for supply chain security talk",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "publish-local": "npm publish --registry http://localhost:4873"
+  }
+}
