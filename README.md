@@ -97,7 +97,14 @@ Manual steps:
 
 ## Demo: "pnpm build scripts"
 
-- cd example-project
+- cd some-library
+- bump version to 1.1.5 and add a postinstall that actively fails
+     ```json
+     "scripts": {
+       "postinstall": "echo 'This is a malicious postinstall script!' && exit 1",
+     }
+     ```
+- cd ../example-project
 - rm -rf node_modules package-lock.json
 - `pnpm install`
 - -> check console and follow instructions
