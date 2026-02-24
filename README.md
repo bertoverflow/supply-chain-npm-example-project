@@ -103,6 +103,21 @@ Manual steps:
 - -> check console and follow instructions
 
 
+## Demo: "pnpm minimum release age"
+
+- cd some-other-library
+- bump version to 2.0.2
+- `npm publish --registry http://localhost:4873`
+- cd example-project
+- rm -rf node_modules package-lock.json
+- `pnpm install`
+- -> version 2.0.2 is installed
+- edit `pnpm-workspace.yaml` in the root of the repo and add `minimumReleaseAge: 10` (see https://pnpm.io/pnpm-workspace-yaml#minimumreleaseage)
+- rm -rf node_modules package-lock.json
+- `pnpm install`
+- -> version 2.0.2 is NOT installed, pnpm respects the minimum release age
+
+
 
 ## Stop and Clear Verdaccio
 
