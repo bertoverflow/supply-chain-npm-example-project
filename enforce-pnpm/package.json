@@ -1,0 +1,15 @@
+{
+  "name": "@demo/enforce-pnpm",
+  "version": "1.0.0",
+  "description": "Demo project to show how to enforce pnpm usage in a project",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "npm": "please-use-pnpm",
+    "yarn": "please-use-pnpm",
+    "bun": "please-use-pnpm",
+    "pnpm": ">=10.26.0"
+  }
+}
