@@ -11,6 +11,8 @@ rm -rf some-library/node_modules
 rm -rf some-library/package-lock.json
 rm -rf some-other-library/node_modules
 rm -rf some-other-library/package-lock.json
+rm -rf enforce-pnpm/node_modules
+rm -rf enforce-pnpm/package-lock.json
 
 cd some-library
 npm publish --registry http://localhost:4873
