@@ -11,7 +11,7 @@ A minimal local demo of a supply chain attack: a victim project depends on `@dem
 
 **IMPORTANT**:
 Do not forget to comment out `ignore-scripts=true` in $HOME/.npmrc for the demo (!)
-Do not forget to comment out `ignore-scripts=true` in $HOME/.npmrc for the demo (!)
+Do not forget to comment out `min-release-age=3` in $HOME/.npmrc for the demo (!)
 
 Use the `prepare_demo.sh` script to set up the demo.
 
