@@ -1,0 +1,9 @@
+# Wait for at least 3 days before installing
+# newly published versions of dependencies
+# https://pnpm.io/settings#minimumreleaseage
+minimumReleaseAge: 4320
+minimumReleaseAgeExclude:
+  - '@my-company/*'
+  # Renovate security update: lodash-es@4.18.1
+  - lodash-es@4.18.1
+

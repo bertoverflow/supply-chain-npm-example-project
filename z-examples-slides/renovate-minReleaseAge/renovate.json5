@@ -1,0 +1,9 @@
+{
+    // https://docs.renovatebot.com/presets-config/#configrecommended
+    extends: ['config:recommended'],
+    // do not create PRs for updates that are less than 3 days old
+    minimumReleaseAge: '3 days',
+    internalChecksFilter: 'strict',
+    // ...
+}
+

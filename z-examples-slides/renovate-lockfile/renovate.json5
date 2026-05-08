@@ -1,0 +1,12 @@
+{
+    // ...
+    // regenerate lock file daily
+    lockFileMaintenance: {
+        addLabels: ['lockfile'],
+        enabled: true,
+        extends: ['schedule:daily'],
+        automerge: true,
+    },
+    // ...
+}
+

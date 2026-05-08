@@ -1,0 +1,54 @@
+{
+    $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+    // https://docs.renovatebot.com/presets-config/#configrecommended
+    // https://docs.renovatebot.com/presets-default/#pinallexceptpeerdependencies
+    extends: ['config:recommended', ':pinAllExceptPeerDependencies'],
+    addLabels: ['dependencies'],
+    timezone: 'Europe/Berlin',
+    schedule: ['at any time'],
+    platformAutomerge: true,
+    // do not create PRs for updates that are less than 3 days old
+    minimumReleaseAge: '3 days',
+    internalChecksFilter: 'strict',
+    // fastlane for CVEs in direct dependencies
+    vulnerabilityAlerts: {
+        addLabels: ['security'],
+        minimumReleaseAge: null,
+        automerge: true,
+    },
+    // regenerate lock file daily
+    lockFileMaintenance: {
+        addLabels: ['lockfile'],
+        enabled: true,
+        extends: ['schedule:daily'],
+        automerge: true,
+    },
+    packageRules: [
+        {
+            // taken from https://docs.renovatebot.com/presets-security/#securityminimumreleaseagenpm
+            description: 'Do not require Minimum Release Age for update types that are controlled by the package manager',
+            // the official preset restricts this rule to npm (which makes sense), but in our setting this leads to the whole rule NOT being applied
+            // matchDatasources: ['npm'],
+            matchUpdateTypes: ['lockFileMaintenance'],
+            minimumReleaseAge: null,
+            prBodyNotes: [
+                "⚠️ Renovate's lock file maintenance functionality does not support validating Minimum Release Age, as the package manager performs the required changes to update package(s). Confirm whether your package manager perform its own validation for the Minimum Release Age of packages.",
+            ],
+        },
+        {
+            // always try to create the lockfileMaintenance PR first
+            matchUpdateTypes: ['lockFileMaintenance'],
+            prPriority: 1,
+        },
+        {
+            matchUpdateTypes: ['major'],
+            addLabels: ['MAJOR'],
+        },
+        {
+            // automerge minor and patch updates
+            matchUpdateTypes: ['minor', 'patch'],
+            automerge: true,
+            automergeType: 'pr',
+        },
+    ],
+}
