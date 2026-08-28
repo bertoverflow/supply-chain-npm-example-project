@@ -114,10 +114,12 @@ Manual steps:
 - `npm publish --registry http://localhost:4873`
 - cd example-project
 - rm -rf node_modules pnpm-lock.yaml
+- edit `pnpm-workspace.yaml` in the root of the repo and add `minimumReleaseAge: 0` (see https://pnpm.io/pnpm-workspace-yaml#minimumreleaseage)
+  - note: we do this because since version 11 pnpm has a default minimum release age of 3 days and we want to show the "normal" behaviour first 
 - `pnpm install`
 - -> version 2.0.2 is installed
 - edit `pnpm-workspace.yaml` in the root of the repo and add `minimumReleaseAge: 10` (see https://pnpm.io/pnpm-workspace-yaml#minimumreleaseage)
-- rm -rf node_modules package-lock.json
+- rm -rf node_modules pnpm-lock.yaml
 - `pnpm install`
 - -> version 2.0.2 is NOT installed, pnpm respects the minimum release age
 
