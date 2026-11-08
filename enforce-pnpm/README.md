@@ -17,6 +17,8 @@ Say: this project refuses npm. The engines field asks for pnpm.
 
 `please-use-pnpm` matches no real version of npm, yarn, or bun. `engine-strict=true` turns that mismatch into an error.
 
+`packageManager` in the same file pins `pnpm@12.18.0`. Keep Node's npm on your PATH. The engines failure on stage is `EBADENGINE`. A Corepack `npm` shim stops earlier, at `This project is configured to use pnpm`.
+
 1. Install with npm. It fails.
 
    ```bash

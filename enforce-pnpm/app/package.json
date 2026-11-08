@@ -1,6 +1,7 @@
 {
   "name": "@demo/enforce-pnpm",
   "version": "1.0.0",
+  "packageManager": "pnpm@12.18.0",
   "description": "Demo project to show how to enforce pnpm usage in a project",
   "main": "src/index.js",
   "scripts": {

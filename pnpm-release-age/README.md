@@ -4,7 +4,7 @@ Setup is in the [repo README](../README.md). Commands below start at the repo ro
 
 Say: this is a different project. It depends on `@demo/cooldown-library` with `^1.0.0`. `1.0.0` has been in the registry since setup. A new version just came out. Let's see which one gets installed.
 
-`minimumReleaseAge` is minutes. pnpm 11 and 12 default to `1440` (1 day). This project sets `0` in `pnpm-release-age/app/pnpm-workspace.yaml`, so the first install takes the newest match. The setting applies to every dependency pnpm resolves. Here the dependency is direct, so the choice is visible in one `package.json`.
+`minimumReleaseAge` is minutes. pnpm 12 defaults to `1440` (1 day). This project sets `0` in `pnpm-release-age/app/pnpm-workspace.yaml`, so the first install takes the newest match. The setting applies to every dependency pnpm resolves. Here the dependency is direct, so the choice is visible in one `package.json`.
 
 **Before you start:** `1.0.0` has to be at least 10 minutes old, and `1.0.1` brand new. `prepare_demo.sh` republishes `1.0.0`. If that publish is younger than 10 minutes, no version qualifies. pnpm exits with `ERR_PNPM_NO_MATURE_MATCHING_VERSION`. A terminal may offer to approve the young version. Do not approve it.
 

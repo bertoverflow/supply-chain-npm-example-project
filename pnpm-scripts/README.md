@@ -10,7 +10,7 @@ Say: this is a different project. It has a dependency with a postinstall hook. L
 "postinstall": "echo 'This is a malicious postinstall script!' && exit 1"
 ```
 
-`pnpm-scripts/app/pnpm-workspace.yaml` sets `minimumReleaseAge: 0`. pnpm 11 and 12 otherwise wait one day, and a package published during setup would show up as a release-age exception. That is the next demo.
+`pnpm-scripts/app/pnpm-workspace.yaml` sets `minimumReleaseAge: 0`. pnpm 12 otherwise waits one day, and a package published during setup would show up as a release-age exception. That is the next demo.
 
 1. Install with pnpm.
 

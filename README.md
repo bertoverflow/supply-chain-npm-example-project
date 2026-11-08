@@ -13,13 +13,9 @@ Every command block in those READMEs starts at this repo root.
 
 - Docker
 - Node.js from `.nvmrc`, and npm
-- pnpm, for the build-scripts, release-age, and enforce-pnpm demos
+- pnpm 12.18.0, for the build-scripts, release-age, and enforce-pnpm demos
 
-Corepack rewrites `package.json` with a `packageManager` field on the first pnpm command. Turn that off for the shell you present from:
-
-```bash
-export COREPACK_ENABLE_AUTO_PIN=0
-```
+Those apps set `packageManager` to `pnpm@12.18.0`. Corepack and pnpm switch to that version. The field is already in `package.json`, so Corepack does not add it on the first command. Run `pnpm --version` in each app once before the talk, so that download is already cached.
 
 ## Setup
 
