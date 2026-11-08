@@ -3,6 +3,34 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
+# The demo must not inherit ignore-scripts, min-release-age, or anything else
+# from the user config. The original file is moved aside, never copied into
+# this repo. finish_demo.sh puts it back. A second prepare leaves the backup
+# where it is.
+npmrc="${HOME}/.npmrc"
+backup="${HOME}/.npmrc.supply-chain-demo-backup"
+absent="${HOME}/.npmrc.supply-chain-demo-was-absent"
+
+if [[ -e "$backup" || -e "$absent" ]]; then
+  if [[ -s "$npmrc" ]]; then
+    echo "Refusing to replace ${npmrc}: a demo backup already exists and the current file is not empty." >&2
+    echo "Run ./finish_demo.sh to restore it, or remove the backup if you restored the file yourself." >&2
+    exit 1
+  fi
+  : >"$npmrc"
+  echo "Demo ${npmrc} is already in place. Backup left untouched."
+else
+  if [[ -e "$npmrc" ]]; then
+    mv "$npmrc" "$backup"
+    echo "Backed up ${npmrc} to ${backup}."
+  else
+    : >"$absent"
+    echo "No ${npmrc} to back up. ${absent} records that."
+  fi
+  : >"$npmrc"
+  echo "Replaced ${npmrc} with an empty file."
+fi
+
 # Back to the committed baseline, once these files are tracked.
 # Attack: some-library 1.1.3, victim pinned to 1.1.3.
 # pnpm scripts: postinstall-library 1.0.0, hook already in package.json.

@@ -15,14 +15,6 @@ Every command block in those READMEs starts at this repo root.
 - Node.js from `.nvmrc`, and npm
 - pnpm, for the build-scripts, release-age, and enforce-pnpm demos
 
-**IMPORTANT**
-
-Comment out `ignore-scripts=true` in `$HOME/.npmrc` before the demo. Otherwise the postinstall never runs.
-
-Comment out `min-release-age` in `$HOME/.npmrc` before the demo. A value there is in days, so a version you publish on stage is refused. pnpm 11 and 12 do not read that key. The release-age demo sets its own gate in `pnpm-workspace.yaml`.
-
-A warning about an unset variable in your user `.npmrc` comes from that file. It is not part of the demo.
-
 Corepack rewrites `package.json` with a `packageManager` field on the first pnpm command. Turn that off for the shell you present from:
 
 ```bash
@@ -31,7 +23,7 @@ export COREPACK_ENABLE_AUTO_PIN=0
 
 ## Setup
 
-`prepare_demo.sh` puts the package files back to the committed baseline, wipes `node_modules` and lockfiles, starts Verdaccio with an empty registry, and publishes the three baseline versions.
+`prepare_demo.sh` moves `$HOME/.npmrc` to `$HOME/.npmrc.supply-chain-demo-backup` and replaces it with an empty file, so `ignore-scripts` and `min-release-age` from your user config stay out of the demo. If there was no file, it records that and still writes the empty one. Running prepare again leaves the backup untouched. It also puts the package files back to the committed baseline, wipes `node_modules` and lockfiles, starts Verdaccio with an empty registry, and publishes the three baseline versions.
 
 Baselines:
 
@@ -45,7 +37,7 @@ Baselines:
 
 The registry is at `http://localhost:4873`. Publish uses a fake token in each library's `.npmrc`. Verdaccio allows anonymous publish of `@demo/*`. Each app's `.npmrc` sends `@demo` installs to that registry. The enforce-pnpm demo does not use the registry.
 
-By hand, from the repo root:
+The commands below do not touch `$HOME/.npmrc`. From the repo root:
 
 ```bash
 docker compose up -d
@@ -58,16 +50,12 @@ npm publish --registry http://localhost:4873
 cd ../..
 ```
 
-## Stop and clear Verdaccio
+## Finish
+
+`finish_demo.sh` restores `$HOME/.npmrc` from the backup, puts the package files back to the baseline, stops Verdaccio, deletes its volume, and wipes `node_modules` and lockfiles.
 
 ```bash
-docker compose down
+./finish_demo.sh
 ```
 
-This stops the container and keeps the packages. The named volume survives. `prepare_demo.sh` deletes that volume. To delete it by hand:
-
-```bash
-docker compose down -v
-```
-
-The next `docker compose up -d` then starts with an empty registry.
+If the backup is missing, the script leaves `$HOME/.npmrc` as it is.
