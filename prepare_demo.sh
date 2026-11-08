@@ -1,21 +1,35 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-# delete old npm packages
+cd "$(dirname "$0")"
+
+# Back to the committed baseline: some-library 1.1.3, some-other-library 2.0.1,
+# example-project pinned to @demo/some-library@1.1.3.
+git checkout -- \
+  example-project/package.json \
+  some-library/package.json \
+  some-other-library/package.json
+
 docker compose down -v
-
 docker compose up -d
 
-rm -rf example-project/node_modules
-rm -rf example-project/package-lock.json
-rm -rf some-library/node_modules
-rm -rf some-library/package-lock.json
-rm -rf some-other-library/node_modules
-rm -rf some-other-library/package-lock.json
-rm -rf enforce-pnpm/node_modules
-rm -rf enforce-pnpm/package-lock.json
+for dir in example-project some-library some-other-library enforce-pnpm; do
+  rm -rf "$dir/node_modules" "$dir/package-lock.json" "$dir/pnpm-lock.yaml"
+done
+rm -f example-project/pnpm-workspace.yaml
 
-cd some-library
-npm publish --registry http://localhost:4873
+ready=0
+for _ in $(seq 1 30); do
+  if curl -fsS http://localhost:4873/-/ping >/dev/null; then
+    ready=1
+    break
+  fi
+  sleep 1
+done
+if [[ "$ready" -ne 1 ]]; then
+  echo "Verdaccio did not answer on http://localhost:4873" >&2
+  exit 1
+fi
 
-cd ../some-other-library
-npm publish --registry http://localhost:4873
+(cd some-library && npm publish --registry http://localhost:4873)
+(cd some-other-library && npm publish --registry http://localhost:4873)
