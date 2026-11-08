@@ -8,8 +8,8 @@ cd "$(dirname "$0")"
 # pnpm scripts: postinstall-library 1.0.0, hook already in package.json.
 # Release age: cooldown-library 1.0.0, victim gate set to 0.
 restore_paths=(
-  example-project/package.json
-  some-library/package.json
+  attack/app/package.json
+  attack/library/package.json
   pnpm-scripts/app/package.json
   pnpm-scripts/app/pnpm-workspace.yaml
   pnpm-scripts/library/package.json
@@ -31,17 +31,17 @@ docker compose down -v
 docker compose up -d
 
 for dir in \
-  example-project \
-  some-library \
+  attack/app \
+  attack/library \
   pnpm-scripts/app \
   pnpm-scripts/library \
   pnpm-release-age/app \
   pnpm-release-age/library \
-  enforce-pnpm
+  enforce-pnpm/app
 do
   rm -rf "$dir/node_modules" "$dir/package-lock.json" "$dir/pnpm-lock.yaml"
 done
-rm -f example-project/pnpm-workspace.yaml
+rm -f attack/app/pnpm-workspace.yaml
 
 ready=0
 for _ in $(seq 1 30); do
@@ -56,6 +56,6 @@ if [[ "$ready" -ne 1 ]]; then
   exit 1
 fi
 
-(cd some-library && npm publish --registry http://localhost:4873)
+(cd attack/library && npm publish --registry http://localhost:4873)
 (cd pnpm-scripts/library && npm publish --registry http://localhost:4873)
 (cd pnpm-release-age/library && npm publish --registry http://localhost:4873)
