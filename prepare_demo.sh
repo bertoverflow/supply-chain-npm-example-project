@@ -3,17 +3,42 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
-# Back to the committed baseline: some-library 1.1.3, some-other-library 2.0.1,
-# example-project pinned to @demo/some-library@1.1.3.
-git checkout -- \
-  example-project/package.json \
-  some-library/package.json \
-  some-other-library/package.json
+# Back to the committed baseline, once these files are tracked.
+# Attack: some-library 1.1.3, victim pinned to 1.1.3.
+# pnpm scripts: postinstall-library 1.0.0, hook already in package.json.
+# Release age: cooldown-library 1.0.0, victim gate set to 0.
+restore_paths=(
+  example-project/package.json
+  some-library/package.json
+  pnpm-scripts/app/package.json
+  pnpm-scripts/app/pnpm-workspace.yaml
+  pnpm-scripts/library/package.json
+  pnpm-release-age/app/package.json
+  pnpm-release-age/app/pnpm-workspace.yaml
+  pnpm-release-age/library/package.json
+)
+tracked=()
+for path in "${restore_paths[@]}"; do
+  if git ls-files --error-unmatch "$path" >/dev/null 2>&1; then
+    tracked+=("$path")
+  fi
+done
+if ((${#tracked[@]} > 0)); then
+  git checkout -- "${tracked[@]}"
+fi
 
 docker compose down -v
 docker compose up -d
 
-for dir in example-project some-library some-other-library enforce-pnpm; do
+for dir in \
+  example-project \
+  some-library \
+  pnpm-scripts/app \
+  pnpm-scripts/library \
+  pnpm-release-age/app \
+  pnpm-release-age/library \
+  enforce-pnpm
+do
   rm -rf "$dir/node_modules" "$dir/package-lock.json" "$dir/pnpm-lock.yaml"
 done
 rm -f example-project/pnpm-workspace.yaml
@@ -32,4 +57,5 @@ if [[ "$ready" -ne 1 ]]; then
 fi
 
 (cd some-library && npm publish --registry http://localhost:4873)
-(cd some-other-library && npm publish --registry http://localhost:4873)
+(cd pnpm-scripts/library && npm publish --registry http://localhost:4873)
+(cd pnpm-release-age/library && npm publish --registry http://localhost:4873)

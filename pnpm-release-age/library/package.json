@@ -1,7 +1,7 @@
 {
-  "name": "@demo/some-other-library",
-  "version": "2.0.1",
-  "description": "Another demo library for supply chain security talk",
+  "name": "@demo/cooldown-library",
+  "version": "1.0.0",
+  "description": "Older published version for the pnpm minimum release age demo",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",

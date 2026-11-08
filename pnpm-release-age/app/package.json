@@ -1,0 +1,12 @@
+{
+  "name": "pnpm-release-age-app",
+  "version": "1.0.0",
+  "description": "Depends on a version range, so a just-published release can be selected",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@demo/cooldown-library": "^1.0.0"
+  }
+}

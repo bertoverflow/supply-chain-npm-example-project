@@ -1,0 +1,11 @@
+{
+  "name": "@demo/postinstall-library",
+  "version": "1.0.0",
+  "description": "Already published with a postinstall hook, for the pnpm build-scripts demo",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "postinstall": "echo 'This is a malicious postinstall script!' && exit 1",
+    "publish-local": "npm publish --registry http://localhost:4873"
+  }
+}

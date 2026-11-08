@@ -1,0 +1,12 @@
+{
+  "name": "pnpm-scripts-app",
+  "version": "1.0.0",
+  "description": "Installs a dependency that already has a postinstall hook",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@demo/postinstall-library": "1.0.0"
+  }
+}

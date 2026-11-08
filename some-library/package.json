@@ -6,8 +6,5 @@
   "scripts": {
     "start": "node src/index.js",
     "publish-local": "npm publish --registry http://localhost:4873"
-  },
-  "dependencies": {
-    "@demo/some-other-library": "^2.0.0"
   }
 }
