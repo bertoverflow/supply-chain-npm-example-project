@@ -23,6 +23,7 @@ fi
 restore_paths=(
   attack/app/package.json
   attack/library/package.json
+  attack-victim/app/package.json
   pnpm-scripts/app/package.json
   pnpm-scripts/app/pnpm-workspace.yaml
   pnpm-scripts/library/package.json
@@ -45,6 +46,7 @@ docker compose down -v
 for dir in \
   attack/app \
   attack/library \
+  attack-victim/app \
   pnpm-scripts/app \
   pnpm-scripts/library \
   pnpm-release-age/app \
@@ -54,3 +56,4 @@ do
   rm -rf "$dir/node_modules" "$dir/package-lock.json" "$dir/pnpm-lock.yaml"
 done
 rm -f attack/app/pnpm-workspace.yaml
+rm -f /tmp/you-were-here.txt

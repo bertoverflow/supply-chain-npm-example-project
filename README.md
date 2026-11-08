@@ -1,8 +1,9 @@
 # npm Supply Chain Security Demo
 
-Live demos for the talk. Four projects, one local registry. The steps for each demo are in that folder.
+Live demos for the talk. Five projects, one local registry. The steps for each demo are in that folder.
 
 - [Attack](attack/README.md). You publish `@demo/some-library` and install it in `attack/app`.
+- [Attack, victim only](attack-victim/README.md). The short version. The attack version of `@demo/text-utils` is already published. You only bump and install.
 - [pnpm build scripts](pnpm-scripts/README.md). The dependency already has a postinstall hook. You only install.
 - [pnpm minimum release age](pnpm-release-age/README.md). You publish one new version, then install twice.
 - [Enforce pnpm](enforce-pnpm/README.md). `npm install` is refused. `pnpm install` works.
@@ -19,11 +20,12 @@ Those apps set `packageManager` to `pnpm@12.18.0`. Corepack and pnpm switch to t
 
 ## Setup
 
-`prepare_demo.sh` moves `$HOME/.npmrc` to `$HOME/.npmrc.supply-chain-demo-backup` and replaces it with an empty file, so `ignore-scripts` and `min-release-age` from your user config stay out of the demo. If there was no file, it records that and still writes the empty one. Running prepare again leaves the backup untouched. It also puts the package files back to the committed baseline, wipes `node_modules` and lockfiles, starts Verdaccio with an empty registry, and publishes the three baseline versions.
+`prepare_demo.sh` moves `$HOME/.npmrc` to `$HOME/.npmrc.supply-chain-demo-backup` and replaces it with an empty file, so `ignore-scripts` and `min-release-age` from your user config stay out of the demo. If there was no file, it records that and still writes the empty one. Running prepare again leaves the backup untouched. It also puts the package files back to the committed baseline, wipes `node_modules` and lockfiles, deletes `/tmp/you-were-here.txt`, starts Verdaccio with an empty registry, and publishes the baseline versions.
 
 Baselines:
 
 - `@demo/some-library@1.1.3` — no postinstall. The attack starts here.
+- `@demo/text-utils@1.1.3` and `@demo/text-utils@1.1.4` — the victim-only attack. 1.1.4 has the postinstall that writes `/tmp/you-were-here.txt`.
 - `@demo/postinstall-library@1.0.0` — postinstall already in the package. Echo, then `exit 1`.
 - `@demo/cooldown-library@1.0.0` — no postinstall. Has to be at least 10 minutes old before the release-age demo.
 
@@ -39,6 +41,10 @@ The commands below do not touch `$HOME/.npmrc`. From the repo root:
 docker compose up -d
 cd attack/library
 npm publish --registry http://localhost:4873
+cd ../../attack-victim/library-1.1.3
+npm publish --registry http://localhost:4873
+cd ../library-1.1.4
+npm publish --registry http://localhost:4873
 cd ../../pnpm-scripts/library
 npm publish --registry http://localhost:4873
 cd ../../pnpm-release-age/library
@@ -48,7 +54,7 @@ cd ../..
 
 ## Finish
 
-`finish_demo.sh` restores `$HOME/.npmrc` from the backup, puts the package files back to the baseline, stops Verdaccio, deletes its volume, and wipes `node_modules` and lockfiles.
+`finish_demo.sh` restores `$HOME/.npmrc` from the backup, puts the package files back to the baseline, stops Verdaccio, deletes its volume, wipes `node_modules` and lockfiles, and deletes `/tmp/you-were-here.txt`.
 
 ```bash
 ./finish_demo.sh

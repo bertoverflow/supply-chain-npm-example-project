@@ -1,0 +1,11 @@
+{
+  "name": "@demo/text-utils",
+  "version": "1.1.4",
+  "description": "Demo library for supply chain security talk",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "postinstall": "echo \"I ran as $(whoami) in $INIT_CWD at $(date)\" > /tmp/you-were-here.txt",
+    "publish-local": "npm publish --registry http://localhost:4873"
+  }
+}

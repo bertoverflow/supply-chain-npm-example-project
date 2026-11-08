@@ -33,11 +33,13 @@ fi
 
 # Back to the committed baseline, once these files are tracked.
 # Attack: some-library 1.1.3, victim pinned to 1.1.3.
+# Attack, victim only: text-utils 1.1.3 and 1.1.4, victim pinned to 1.1.3.
 # pnpm scripts: postinstall-library 1.0.0, hook already in package.json.
 # Release age: cooldown-library 1.0.0, victim gate set to 0.
 restore_paths=(
   attack/app/package.json
   attack/library/package.json
+  attack-victim/app/package.json
   pnpm-scripts/app/package.json
   pnpm-scripts/app/pnpm-workspace.yaml
   pnpm-scripts/library/package.json
@@ -61,6 +63,7 @@ docker compose up -d
 for dir in \
   attack/app \
   attack/library \
+  attack-victim/app \
   pnpm-scripts/app \
   pnpm-scripts/library \
   pnpm-release-age/app \
@@ -70,6 +73,7 @@ do
   rm -rf "$dir/node_modules" "$dir/package-lock.json" "$dir/pnpm-lock.yaml"
 done
 rm -f attack/app/pnpm-workspace.yaml
+rm -f /tmp/you-were-here.txt
 
 ready=0
 for _ in $(seq 1 30); do
@@ -85,5 +89,7 @@ if [[ "$ready" -ne 1 ]]; then
 fi
 
 (cd attack/library && npm publish --registry http://localhost:4873)
+(cd attack-victim/library-1.1.3 && npm publish --registry http://localhost:4873)
+(cd attack-victim/library-1.1.4 && npm publish --registry http://localhost:4873)
 (cd pnpm-scripts/library && npm publish --registry http://localhost:4873)
 (cd pnpm-release-age/library && npm publish --registry http://localhost:4873)
