@@ -20,7 +20,7 @@ Those apps set `packageManager` to `pnpm@12.18.0`. Corepack and pnpm switch to t
 
 ## Setup
 
-`prepare_demo.sh` moves `$HOME/.npmrc` to `$HOME/.npmrc.supply-chain-demo-backup` and replaces it with an empty file, so `ignore-scripts` and `min-release-age` from your user config stay out of the demo. If there was no file, it records that and still writes the empty one. Running prepare again leaves the backup untouched. It also puts the package files back to the committed baseline, wipes `node_modules` and lockfiles, deletes `/tmp/you-were-here.txt`, starts Verdaccio with an empty registry, and publishes the baseline versions.
+`prepare_demo.sh` moves `$HOME/.npmrc` to `$HOME/.npmrc.supply-chain-demo-backup` and replaces it with an empty file, so `ignore-scripts` and `min-release-age` from your user config stay out of the demo. If there was no file, it records that and still writes the empty one. Running prepare again leaves the backup untouched. It also puts the package files back to the committed baseline, including `attack-victim/app/package-lock.json`, wipes `node_modules` and the other lockfiles, deletes `/tmp/you-were-here.txt`, starts Verdaccio with an empty registry, and publishes the baseline versions.
 
 Baselines:
 
@@ -54,7 +54,7 @@ cd ../..
 
 ## Finish
 
-`finish_demo.sh` restores `$HOME/.npmrc` from the backup, puts the package files back to the baseline, stops Verdaccio, deletes its volume, wipes `node_modules` and lockfiles, and deletes `/tmp/you-were-here.txt`.
+`finish_demo.sh` restores `$HOME/.npmrc` from the backup, puts the package files back to the baseline, including `attack-victim/app/package-lock.json`, stops Verdaccio, deletes its volume, wipes `node_modules` and the other lockfiles, and deletes `/tmp/you-were-here.txt`.
 
 ```bash
 ./finish_demo.sh

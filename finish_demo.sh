@@ -24,6 +24,7 @@ restore_paths=(
   attack/app/package.json
   attack/library/package.json
   attack-victim/app/package.json
+  attack-victim/app/package-lock.json
   pnpm-scripts/app/package.json
   pnpm-scripts/app/pnpm-workspace.yaml
   pnpm-scripts/library/package.json
@@ -53,7 +54,11 @@ for dir in \
   pnpm-release-age/library \
   enforce-pnpm/app
 do
-  rm -rf "$dir/node_modules" "$dir/package-lock.json" "$dir/pnpm-lock.yaml"
+  rm -rf "$dir/node_modules" "$dir/pnpm-lock.yaml"
+  # Kept so the first victim install stays on the committed 1.1.3 lock.
+  if [[ "$dir" != "attack-victim/app" ]]; then
+    rm -f "$dir/package-lock.json"
+  fi
 done
 rm -f attack/app/pnpm-workspace.yaml
 rm -f /tmp/you-were-here.txt
